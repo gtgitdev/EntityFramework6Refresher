@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="DAL.Tests.DeleteTests.DeleteDataTests.ShouldDeleteCategory" /><Add Test="DAL.Tests.DeleteTests.DeleteDataTests.ShouldDeleteCategoryById" /><Add Test="DAL.Tests.DeleteTests.DeleteDataTests.ShouldDeleteNewInstanceCategoryById" /><Add Test="DAL.Tests.DeleteTests.DeleteDataTests.ShouldDeleteWithEntityState" /></Playlist>
