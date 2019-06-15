@@ -25,30 +25,52 @@ namespace DAL.Tests.ReadTests
         [Fact]
         public void ShouldGetAllCategories()
         {
+            var list = Db.Categories;
+            Assert.Equal(3, list.ToList().Count);
         }
 
         [Fact]
         public void ShouldGetFirstCategory()
         {
+            var myId = 2;
+            var cat = Db.Categories.FirstOrDefault(c => c.Id == myId);
+            Assert.Equal(myId,cat?.Id);
         }
 
         [Fact]
         public void ShouldGetOneCategory()
         {
+            var myId = 2;
+            var cat = Db.Categories.Where(c => c.Id == myId).FirstOrDefault();
+            Assert.Equal(myId, cat?.Id);
         }
 
         [Fact]
         public void ShouldFindOneCategory()
         {
+            var myId = 2;
+            var cat = Db.Categories.Find(2);
+            Assert.Equal(myId, cat?.Id);
+
         }
 
         [Fact]
         public void ShouldGetAllProducts()
         {
+            var myId = 2;
+            var cat = Db.Categories.Find(2);
+            Assert.Equal(myId,cat?.Products.Count);
+            Assert.Equal("Name", cat?.Products.ToList()[0].ModelName);
+
         }
         [Fact]
         public void ShouldGetAllProductsWithCategory()
         {
+            var myId = 2;
+            var cat = Db.Categories.Include(c => c.Products).FirstOrDefault(c => c.Id == myId);
+            Assert.Equal(myId, cat?.Products.Count);
+            Assert.Equal("Name", cat?.Products.ToList()[0].ModelName);
+
         }
     }
 }
