@@ -23,10 +23,29 @@ namespace DAL.Tests.UpdateTests
         [Fact]
         public void ShouldUpdateCategoryName()
         {
+            var cat = Db.Categories.First();
+            cat.CategoryName = "Bar";
+            Db.SaveChanges();
+
+            var updatedCat = new IntroToEfContext().Categories.First();
+            Assert.Equal("Bar", updatedCat.CategoryName);
+
+
+
         }
         [Fact]
         public void ShouldProductModelName()
         {
+            var cat = Db.Categories.Include(c => c.Products).First();
+            var modelName = "Foo";
+
+            cat.Products.ToList()[0].ModelName = modelName;
+            Db.SaveChanges();
+
+            var cat2 = new IntroToEfContext().Categories.Include(c => c.Products).First();
+
+            Assert.Equal(modelName, cat2.Products.ToList()[0].ModelName);
+
         }
     }
 }
