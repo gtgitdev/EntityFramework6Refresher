@@ -23,16 +23,49 @@ namespace DAL.Tests.DeleteTests
         [Fact]
         public void ShouldDeleteCategory()
         {
+            var catCount = Db.Categories.Count();
+            var prodCount = Db.Products.Count();
+            var cat = Db.Categories.First();
+            Db.Categories.Remove(cat);
+            Db.SaveChanges();
+
+            Assert.Equal(catCount -1, Db.Categories.Count());
+            Assert.Equal(prodCount-2, Db.Products.Count());
         }
 
         [Fact]
         public void ShouldDeleteWithEntityState()
         {
+            //will fail if products loaded, better to use remove
+            var catCount = Db.Categories.Count();
+            var prodCount = Db.Products.Count();
+            var cat = Db.Categories.First();
+            Db.Entry(cat).State = EntityState.Deleted;
+            Db.SaveChanges();
+            Assert.Equal(catCount - 1, Db.Categories.Count());
+            Assert.Equal(prodCount - 2, Db.Products.Count());
+
         }
 
         [Fact]
         public void ShouldDeleteCategoryById()
         {
+            var catCount = Db.Categories.Count();
+            var prodCount = Db.Products.Count();
+            var cat = Db.Categories.First();
+
+            var newDb = new IntroToEfContext();
+            var catToDelete = new Category {Id = cat.Id, TimeStamp = cat.TimeStamp};
+
+            newDb.Entry(catToDelete).State = EntityState.Deleted;
+
+            newDb.SaveChanges();
+
+            Assert.Equal(catCount - 1, Db.Categories.Count());
+            Assert.Equal(prodCount - 2, Db.Products.Count());
+
+
+
         }
     }
 }
