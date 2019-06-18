@@ -20,6 +20,31 @@ namespace DAL.Tests.UpdateTests
         [Fact]
         public void ShouldThrowConcurrencyError()
         {
+            var cat = Db.Categories.First();
+            Db.Database.ExecuteSqlCommand("Update Store.Categories set CategoryName = 'Bar'");
+            cat.CategoryName = "FooBar";
+
+            var ex = Assert.Throws<DbUpdateConcurrencyException>(() => Db.SaveChanges());
+
+            //Database wins
+            //ex.Entries.Single().Reload();
+
+            //Client wins
+            //var entry = ex.Entries.Single();
+            //entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+
+            //Custom Scenario
+            var entry = ex.Entries.Single();
+            var originalValues = entry.OriginalValues;
+            var originalCatName = originalValues[nameof(cat.CategoryName)];
+            var currentValues = entry.CurrentValues;
+            var currentName = currentValues[nameof(cat.CategoryName)];
+            var databaseValues = entry.GetDatabaseValues();
+            var databaseName = databaseValues[nameof(cat.CategoryName)];
+
+            Assert.Equal("Foo", originalCatName);
+            Assert.Equal("Bar", databaseName);
+            Assert.Equal("FooBar", currentName);
         }
     }
 }
